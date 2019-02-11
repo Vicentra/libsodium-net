@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Sodium.Exceptions;
@@ -59,9 +58,8 @@ namespace Sodium
 
       var cipher = new byte[message.Length + ABYTES];
       var bin = Marshal.AllocHGlobal(cipher.Length);
-      long cipherLength;
 
-      var ret = SodiumLibrary.crypto_aead_chacha20poly1305_encrypt(bin, out cipherLength, message, message.Length, additionalData, additionalData.Length, null,
+      var ret = SodiumLibrary.crypto_aead_chacha20poly1305_ietf_encrypt(bin, out long cipherLength, message, message.Length, additionalData, additionalData.Length, null,
         nonce, key);
 
       Marshal.Copy(bin, cipher, 0, (int) cipherLength);
@@ -115,9 +113,8 @@ namespace Sodium
 
       var message = new byte[cipher.Length - ABYTES];
       var bin = Marshal.AllocHGlobal(message.Length);
-      long messageLength;
 
-      var ret = SodiumLibrary.crypto_aead_chacha20poly1305_decrypt(bin, out messageLength, null, cipher, cipher.Length,
+      var ret = SodiumLibrary.crypto_aead_chacha20poly1305_ietf_decrypt(bin, out long messageLength, null, cipher, cipher.Length,
         additionalData, additionalData.Length, nonce, key);
 
       Marshal.Copy(bin, message, 0, (int)messageLength);
