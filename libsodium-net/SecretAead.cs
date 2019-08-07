@@ -9,8 +9,8 @@ namespace Sodium
   public static class SecretAead
   {
     private const int KEYBYTES = 32;
-    private const int NPUBBYTES = 8;
-    private const int ABYTES = 16;
+    private const int NPUBBYTES = 12;
+    private const int ABYTES = 64;
 
     //TODO: we could implement a method which increments the nonce.
 
@@ -111,7 +111,7 @@ namespace Sodium
         throw new AdditionalDataOutOfRangeException(
           string.Format("additionalData must be between {0} and {1} bytes in length.", 0, ABYTES));
 
-      var message = new byte[cipher.Length - ABYTES];
+      var message = new byte[cipher.Length];
       var bin = Marshal.AllocHGlobal(message.Length);
 
       var ret = SodiumLibrary.crypto_aead_chacha20poly1305_ietf_decrypt(bin, out long messageLength, null, cipher, cipher.Length,
